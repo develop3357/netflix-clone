@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     children: [
       { path: "tv", element: <Tv /> },
       { path: "search", element: <Search /> },
-      { path: "movie", element: <Movie /> },
+      { path: "movie/*", element: <Movie /> },
       { path: "", element: <Movie /> },
       { path: "*", element: <Navigate to="/" replace /> },
     ],

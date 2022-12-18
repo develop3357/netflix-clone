@@ -151,7 +151,7 @@ const offset = 6;
 
 function Movie() {
   const navigate = useNavigate();
-  const bigMovieMatch = useMatch("/movies/:movieId");
+  const bigMovieMatch = useMatch("/movie/:movieId");
   const { data, isLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
@@ -168,7 +168,7 @@ function Movie() {
     }
   };
   const onBoxClicked = (movieId: number) => {
-    navigate(`/movies/${movieId}`);
+    navigate(`/movie/${movieId}`);
   };
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onOverlayClick = () => {
