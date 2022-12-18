@@ -148,7 +148,7 @@ const infoVariants = {
 
 const offset = 6;
 
-function Home() {
+function Movie() {
   const navigate = useNavigate();
   const bigMovieMatch = useMatch("/movies/:movieId");
   const { data, isLoading } = useQuery<IGetMoviesResult>(
@@ -256,4 +256,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Movie;

@@ -1,6 +1,6 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
-import Home from "./Home";
+import Movie from "./Movie";
 import Search from "./Search";
 import Tv from "./Tv";
 
@@ -11,8 +11,9 @@ const router = createBrowserRouter([
     children: [
       { path: "tv", element: <Tv /> },
       { path: "search", element: <Search /> },
-      { path: "", element: <Home /> },
-      { path: "*", element: <Home /> },
+      { path: "movie", element: <Movie /> },
+      { path: "", element: <Movie /> },
+      { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
 ]);
