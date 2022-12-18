@@ -49,10 +49,39 @@ const Info = styled(motion.div)`
   }
 `;
 
+const SlideButton = styled(motion.div)`
+  opacity: 0.6;
+  position: absolute;
+  top: 80px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 1);
+  color: black;
+  display: grid;
+  place-items: center;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const SlideNextButton = styled(SlideButton)`
+  right: 5px;
+`;
+
+const SlidePrevButton = styled(SlideButton)`
+  left: 5px;
+`;
+
 const rowVariants = {
-  hidden: { x: window.outerWidth - 10 },
-  visible: { x: 0 },
-  exit: { x: -window.outerWidth + 10 },
+  hidden: (isDirectionNext: boolean) => ({
+    x: isDirectionNext ? window.outerWidth - 5 : -window.outerWidth + 5,
+  }),
+  visible: { x: 0, transition: { duration: 1 } },
+  exit: (isDirectionNext: boolean) => ({
+    x: isDirectionNext ? -window.outerWidth + 5 : window.outerWidth - 5,
+    transition: { duration: 1 },
+  }),
 };
 
 const boxVariants = {
@@ -67,29 +96,53 @@ const infoVariants = {
   },
 };
 
+const slideButtonVariants = {
+  hover: {
+    scale: 1.25,
+    opacity: 0.9,
+  },
+};
+
 const offset = 6;
 
 function Slider({ data }: { data: IGetMoviesResult | undefined }) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
+  const [isSlideNext, setSlideNext] = useState(true);
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const increaseIndex = () => {
-    if (data) {
-      if (leaving) return;
-      toggleLeaving();
-      const totalMovies = data.results.length - 1;
-      const maxIndex = Math.floor(totalMovies / offset);
-      setIndex((prev) => (prev === maxIndex - 1 ? 0 : prev + 1));
-    }
-  };
   const onBoxClicked = (movieId: number) => {
     navigate(`/movie/${movieId}`);
   };
+  const slide = (isNext: boolean) => {
+    setSlideNext(isNext);
+    if (data) {
+      if (leaving) return;
+      toggleLeaving();
+      setIndex((prev) => {
+        const totalMovies = data.results.length - 1;
+        const maxIndex = Math.floor(totalMovies / offset);
+        let nextIndex = 0;
+        if (isNext) {
+          nextIndex = prev === maxIndex - 1 ? 0 : prev + 1;
+        } else {
+          nextIndex = prev === 0 ? maxIndex - 1 : prev - 1;
+        }
+        return nextIndex;
+      });
+    }
+  };
+  const slideNext = () => slide(true);
+  const slidePrev = () => slide(false);
   return (
-    <Wrapper onClick={increaseIndex}>
-      <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+    <Wrapper>
+      <AnimatePresence
+        initial={false}
+        onExitComplete={toggleLeaving}
+        custom={isSlideNext}
+      >
         <Row
+          custom={isSlideNext}
           key={index}
           variants={rowVariants}
           initial="hidden"
@@ -115,6 +168,22 @@ function Slider({ data }: { data: IGetMoviesResult | undefined }) {
               </Box>
             ))}
         </Row>
+        <SlidePrevButton
+          key="slidePrevButton"
+          onClick={slidePrev}
+          variants={slideButtonVariants}
+          whileHover="hover"
+        >
+          ➡
+        </SlidePrevButton>
+        <SlideNextButton
+          key="slideNextButton"
+          onClick={slideNext}
+          variants={slideButtonVariants}
+          whileHover="hover"
+        >
+          ⬅
+        </SlideNextButton>
       </AnimatePresence>
     </Wrapper>
   );

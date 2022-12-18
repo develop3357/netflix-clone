@@ -79,7 +79,8 @@ const PopupPannelInfo = styled(motion.div)`
   padding: 20px;
   display: grid;
   grid-template-columns: 2fr 7fr;
-
+  align-content: flex-start;
+  gap: 15px 0;
   &:first-child {
     color: black;
     justify-self: stretch;
