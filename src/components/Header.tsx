@@ -103,6 +103,7 @@ function Header() {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm<IForm>();
   const [searchOpen, setSearchOpen] = useState(false);
+  const homeMatch = useMatch("");
   const movieMatch = useMatch("movie");
   const tvMatch = useMatch("tv");
   const navAnimation = useAnimation();
@@ -144,7 +145,7 @@ function Header() {
           <Item>
             <Link to="/movie">
               Movies
-              {movieMatch && <Circle layoutId="navCircle" />}
+              {(movieMatch || homeMatch) && <Circle layoutId="navCircle" />}
             </Link>
           </Item>
           <Item>
