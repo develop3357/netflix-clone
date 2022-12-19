@@ -1,14 +1,21 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { makeImagePath } from "../utils";
-import IMovieNowPlaying from "../models/IMovieNowPlaying";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Result from "../models/Result";
+import MovieModel from "../models/MovieModel";
+import { useSetRecoilState } from "recoil";
+import { moviePopupState, popupLayoutIdState } from "../atoms";
 
 const Wrapper = styled.div`
   position: relative;
+  height: 300px;
+`;
+
+const Label = styled.div`
+  font-size: 36px;
+  padding: 10px;
 `;
 
 const Row = styled(motion.div)`
@@ -16,8 +23,8 @@ const Row = styled(motion.div)`
   gap: 10px;
   grid-template-columns: repeat(6, 1fr);
   margin-bottom: 5px;
-  position: absolute;
   width: 100%;
+  position: absolute;
 `;
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
@@ -52,7 +59,7 @@ const Info = styled(motion.div)`
 const SlideButton = styled(motion.div)`
   opacity: 0.6;
   position: absolute;
-  top: 80px;
+  top: 140px;
   width: 40px;
   height: 40px;
   border-radius: 20px;
@@ -73,14 +80,14 @@ const SlidePrevButton = styled(SlideButton)`
   left: 5px;
 `;
 
-const rowVariants = {
+const rowVariants: Variants = {
   hidden: (isDirectionNext: boolean) => ({
     x: isDirectionNext ? window.outerWidth - 5 : -window.outerWidth + 5,
   }),
-  visible: { x: 0, transition: { duration: 1 } },
+  visible: { x: 0, transition: { duration: 0.3, ease: "easeInOut" } },
   exit: (isDirectionNext: boolean) => ({
     x: isDirectionNext ? -window.outerWidth + 5 : window.outerWidth - 5,
-    transition: { duration: 1 },
+    transition: { duration: 0.3, ease: "easeInOut" },
   }),
 };
 
@@ -105,14 +112,25 @@ const slideButtonVariants = {
 
 const offset = 6;
 
-function Slider({ data }: { data: Result[] | undefined }) {
+interface ISliderProps {
+  data: MovieModel[] | undefined;
+  label: string;
+}
+
+function Slider({ data, label }: ISliderProps) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isSlideNext, setSlideNext] = useState(true);
+  const randomLayoutIdPreffix = "" + Date.now();
+  const setMovieOnPopup = useSetRecoilState(moviePopupState);
+  const setPopupLayoutId = useSetRecoilState(popupLayoutIdState);
+
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClicked = (movieId: number) => {
-    navigate(`/movie/${movieId}`);
+  const onBoxClicked = (movie: MovieModel, layoutId: string) => {
+    setPopupLayoutId(layoutId);
+    setMovieOnPopup(movie);
+    navigate(`/movie/${movie.id}`);
   };
   const slide = (isNext: boolean) => {
     setSlideNext(isNext);
@@ -134,8 +152,10 @@ function Slider({ data }: { data: Result[] | undefined }) {
   };
   const slideNext = () => slide(true);
   const slidePrev = () => slide(false);
+
   return (
     <Wrapper>
+      <Label>{label}</Label>
       <AnimatePresence
         initial={false}
         onExitComplete={toggleLeaving}
@@ -149,24 +169,21 @@ function Slider({ data }: { data: Result[] | undefined }) {
           animate="visible"
           exit="exit"
         >
-          {data
-            ?.slice(1)
-            .slice(offset * index, offset * (index + 1))
-            .map((movie) => (
-              <Box
-                layoutId={"" + movie.id}
-                key={movie.id}
-                bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                variants={boxVariants}
-                initial="normal"
-                whileHover="hover"
-                onClick={() => onBoxClicked(movie.id)}
-              >
-                <Info variants={infoVariants}>
-                  <h4>{movie.title}</h4>
-                </Info>
-              </Box>
-            ))}
+          {data?.slice(offset * index, offset * (index + 1)).map((movie) => (
+            <Box
+              layoutId={label + movie.id}
+              key={movie.id}
+              bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+              variants={boxVariants}
+              initial="normal"
+              whileHover="hover"
+              onClick={() => onBoxClicked(movie, label + movie.id)}
+            >
+              <Info variants={infoVariants}>
+                <h4>{movie.title}</h4>
+              </Info>
+            </Box>
+          ))}
         </Row>
         <SlidePrevButton
           key="slidePrevButton"

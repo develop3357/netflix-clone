@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import { useMatch, useNavigate } from "react-router-dom";
+import { useMatch } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { getMovieNowPlaying, getMovieTopRated } from "../api";
+import { getMovieNowPlaying, getMovieTopRated, getMovieUpcoming } from "../api";
+import { moviePopupState } from "../atoms";
+import DetailsPopup from "../components/DetailsPopup";
 import Slider from "../components/Slider";
 import { makeImagePath } from "../utils";
-import IMovieNowPlaying from "../models/IMovieNowPlaying";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -42,62 +42,9 @@ const Overview = styled.p`
   width: 50%;
 `;
 
-const SliderContainer = styled.div`
-  label {
-    font-size: 30px;
-  }
-`;
-
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-`;
-
-const PopupPannel = styled(motion.div)`
-  border-radius: 15px;
-  position: fixed;
-  width: 80vw;
-  height: 80vh;
-  top: 10vh;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: ${(props) => props.theme.black.lighter};
-`;
-const PopupPannelImage = styled(motion.div)`
-  height: 50vh;
-  background-size: cover;
-  display: flex;
-  align-items: flex-end;
-  h2 {
-    padding: 30px 20px;
-    font-size: 36px;
-  }
-`;
-const PopupPannelInfo = styled(motion.div)`
-  height: 30vh;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: 2fr 7fr;
-  align-content: flex-start;
-  gap: 15px 0;
-  &:first-child {
-    color: black;
-    justify-self: stretch;
-    background-color: red;
-  }
-`;
-
 function Movie() {
-  const navigate = useNavigate();
-  const bigMovieMatch = useMatch("/movie/:movieId");
+  const movieIdMatch = useMatch("/movie/:movieId");
+  const movieOnPopup = useRecoilValue(moviePopupState);
   const { data: nowPlaying, isLoading: nowPlayingIsLoading } = useQuery(
     ["movies", "nowPlaying"],
     getMovieNowPlaying
@@ -106,15 +53,11 @@ function Movie() {
     ["movies", "topRated"],
     getMovieTopRated
   );
+  const { data: upcoming, isLoading: upcomingIsLoading } = useQuery(
+    ["movies", "upcoming"],
+    getMovieUpcoming
+  );
 
-  const onOverlayClick = () => {
-    navigate(-1);
-  };
-  const clickedMovie =
-    bigMovieMatch?.params.movieId &&
-    nowPlaying?.results.find(
-      (movie) => "" + movie.id === bigMovieMatch.params.movieId
-    );
   return (
     <Wrapper>
       {nowPlayingIsLoading ? (
@@ -127,45 +70,12 @@ function Movie() {
             <Title>{nowPlaying?.results[0].title}</Title>
             <Overview>{nowPlaying?.results[0].overview}</Overview>
           </Banner>
-          <SliderContainer>
-            <label>Now Playing</label>
-            <Slider data={nowPlaying?.results} />
-          </SliderContainer>
-          {/* <SliderContainer>
-            <label>Top Rated</label>
-            <Slider data={topRated} />
-          </SliderContainer> */}
-          <AnimatePresence>
-            {bigMovieMatch && (
-              <>
-                <Overlay onClick={onOverlayClick} animate={{ opacity: 1 }} />
-                {clickedMovie && (
-                  <PopupPannel layoutId={bigMovieMatch.params.movieId}>
-                    <PopupPannelImage
-                      style={{
-                        backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                          clickedMovie.backdrop_path,
-                          "w500"
-                        )})`,
-                      }}
-                    >
-                      <h2>{clickedMovie.title}</h2>
-                    </PopupPannelImage>
-                    <PopupPannelInfo>
-                      <h4>Release</h4>
-                      <span>{clickedMovie.release_date}</span>
-                      <h4>Stars</h4>
-                      <span>{clickedMovie.vote_average}</span>
-                      <h4>Overview</h4>
-                      <span>{clickedMovie.overview}</span>
-                    </PopupPannelInfo>
-                  </PopupPannel>
-                )}
-              </>
-            )}
-          </AnimatePresence>
+          <Slider label="Now Playing" data={nowPlaying?.results} />
+          <Slider label="Top Rated" data={topRated?.results} />
+          <Slider label="Upcoming" data={upcoming?.results} />
         </>
       )}
+      {movieOnPopup && <DetailsPopup movie={movieOnPopup} />}
     </Wrapper>
   );
 }

@@ -1,10 +1,10 @@
-import Dates from "./Dates";
-import Result from "./Result";
+import DatesModel from "./DatesModel";
+import MovieModel from "./MovieModel";
 
 interface IMovieUpcoming {
-  dates: Dates;
+  dates: DatesModel;
   page: number;
-  results: Result[];
+  results: MovieModel[];
   total_pages: number;
   total_results: number;
 }

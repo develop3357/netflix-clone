@@ -1,8 +1,8 @@
-import Result from "./Result";
+import MovieModel from "./MovieModel";
 
 interface IMovieTopRated {
   page: number;
-  results: Result[];
+  results: MovieModel[];
   total_pages: number;
   total_results: number;
 }
