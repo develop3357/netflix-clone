@@ -25,14 +25,16 @@ const Overview = styled.p`
 `;
 
 interface IBannerProps {
-  data: MovieModel | undefined;
+  imageUrl: string | undefined;
+  title: string | undefined;
+  overview: string | undefined;
 }
 
-function Banner({ data }: IBannerProps) {
+function Banner({ imageUrl, title, overview }: IBannerProps) {
   return (
-    <Wrapper bgPhoto={makeImagePath(data?.backdrop_path || "")}>
-      <Title>{data?.title}</Title>
-      <Overview>{data?.overview}</Overview>
+    <Wrapper bgPhoto={makeImagePath(imageUrl || "")}>
+      <Title>{title}</Title>
+      <Overview>{overview}</Overview>
     </Wrapper>
   );
 }

@@ -6,6 +6,7 @@ import { moviePopupState } from "../atoms";
 import Banner from "../components/Banner";
 import DetailsPopup from "../components/DetailsPopup";
 import Slider from "../components/Slider";
+import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -33,7 +34,11 @@ function Tv() {
       {airlingTodayIsLoading ? (
         <Loader>Loading...</Loader>
       ) : (
-        <Banner data={airlingToday?.results[0]} />
+        <Banner
+          title={airlingToday?.results[0].name}
+          imageUrl={makeImagePath(airlingToday?.results[0].backdrop_path || "")}
+          overview={airlingToday?.results[0].overview}
+        />
       )}
       <Slider
         context="tv"
