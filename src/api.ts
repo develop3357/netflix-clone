@@ -3,9 +3,10 @@ import IMovieNowPlaying from "./models/IMovieNowPlaying";
 import IMovieTopRated from "./models/IMovieTopRated";
 import IMovieUpcoming from "./models/IMovieUpcoming";
 
-// https://api.themoviedb.org/3/movie/now_playing?api_key=c69cadee278c9644c6f9592e6cb64d46
+// https://developers.themoviedb.org/3/tv/get-top-rated-tv
+// https://api.themoviedb.org/3/movie/now_playing?api_key={key}
 
-const API_KEY = "c69cadee278c9644c6f9592e6cb64d46";
+const API_KEY = process.env.REACT_APP_API_KEY;
 const BASE_PATH = "https://api.themoviedb.org/3";
 
 function getData(category: string, subject: string) {
