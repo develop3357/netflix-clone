@@ -122,7 +122,6 @@ function Slider({ data, label }: ISliderProps) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isSlideNext, setSlideNext] = useState(true);
-  const randomLayoutIdPreffix = "" + Date.now();
   const setMovieOnPopup = useSetRecoilState(moviePopupState);
   const setPopupLayoutId = useSetRecoilState(popupLayoutIdState);
 
