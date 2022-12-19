@@ -9,8 +9,8 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      { path: "tv", element: <Tv /> },
       { path: "search", element: <Search /> },
+      { path: "tv/*", element: <Tv /> },
       { path: "movie/*", element: <Movie /> },
       { path: "", element: <Movie /> },
       { path: "*", element: <Navigate to="/" replace /> },

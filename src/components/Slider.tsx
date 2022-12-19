@@ -115,9 +115,10 @@ const offset = 6;
 interface ISliderProps {
   data: MovieModel[] | undefined;
   label: string;
+  context: string;
 }
 
-function Slider({ data, label }: ISliderProps) {
+function Slider({ data, label, context }: ISliderProps) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -129,7 +130,7 @@ function Slider({ data, label }: ISliderProps) {
   const onBoxClicked = (movie: MovieModel, layoutId: string) => {
     setPopupLayoutId(layoutId);
     setMovieOnPopup(movie);
-    navigate(`/movie/${movie.id}`);
+    navigate(`/${context}/${movie.id}`);
   };
   const slide = (isNext: boolean) => {
     setSlideNext(isNext);

@@ -35,9 +35,13 @@ function Tv() {
       ) : (
         <Banner data={airlingToday?.results[0]} />
       )}
-      <Slider label="Now Playing" data={airlingToday?.results.slice(1)} />
-      <Slider label="Top Rated" data={topRated?.results} />
-      <Slider label="Upcoming" data={popular?.results} />
+      <Slider
+        context="tv"
+        label="Now Playing"
+        data={airlingToday?.results.slice(1)}
+      />
+      <Slider context="tv" label="Top Rated" data={topRated?.results} />
+      <Slider context="tv" label="Upcoming" data={popular?.results} />
       {movieOnPopup && <DetailsPopup movie={movieOnPopup} />}
     </Wrapper>
   );

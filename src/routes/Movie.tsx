@@ -34,9 +34,13 @@ function Movie() {
       ) : (
         <Banner data={nowPlaying?.results[0]} />
       )}
-      <Slider label="Now Playing" data={nowPlaying?.results.slice(1)} />
-      <Slider label="Top Rated" data={topRated?.results} />
-      <Slider label="Upcoming" data={upcoming?.results} />
+      <Slider
+        context="movie"
+        label="Now Playing"
+        data={nowPlaying?.results.slice(1)}
+      />
+      <Slider context="movie" label="Top Rated" data={topRated?.results} />
+      <Slider context="movie" label="Upcoming" data={upcoming?.results} />
       {movieOnPopup && <DetailsPopup movie={movieOnPopup} />}
     </Wrapper>
   );
