@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../api";
+import { getMovieNowPlaying, getMovieTopRated } from "../api";
 import Slider from "../components/Slider";
 import { makeImagePath } from "../utils";
+import IMovieNowPlaying from "../models/IMovieNowPlaying";
 
 const Wrapper = styled.div`
   background-color: black;
-  padding-bottom: 200px;
+  padding-bottom: 30vh;
 `;
 
 const Loader = styled.div`
@@ -20,7 +21,7 @@ const Loader = styled.div`
 `;
 
 const Banner = styled.div<{ bgPhoto: string }>`
-  height: 100vh;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,6 +40,12 @@ const Title = styled.h2`
 const Overview = styled.p`
   font-size: 16px;
   width: 50%;
+`;
+
+const SliderContainer = styled.div`
+  label {
+    font-size: 30px;
+  }
 `;
 
 const Overlay = styled(motion.div)`
@@ -91,9 +98,13 @@ const PopupPannelInfo = styled(motion.div)`
 function Movie() {
   const navigate = useNavigate();
   const bigMovieMatch = useMatch("/movie/:movieId");
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
+  const { data: nowPlaying, isLoading: nowPlayingIsLoading } = useQuery(
     ["movies", "nowPlaying"],
-    getMovies
+    getMovieNowPlaying
+  );
+  const { data: topRated, isLoading: topRatedIsLoading } = useQuery(
+    ["movies", "topRated"],
+    getMovieTopRated
   );
 
   const onOverlayClick = () => {
@@ -101,20 +112,29 @@ function Movie() {
   };
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
-    data?.results.find(
+    nowPlaying?.results.find(
       (movie) => "" + movie.id === bigMovieMatch.params.movieId
     );
   return (
     <Wrapper>
-      {isLoading ? (
+      {nowPlayingIsLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
-            <Title>{data?.results[0].title}</Title>
-            <Overview>{data?.results[0].overview}</Overview>
+          <Banner
+            bgPhoto={makeImagePath(nowPlaying?.results[0].backdrop_path || "")}
+          >
+            <Title>{nowPlaying?.results[0].title}</Title>
+            <Overview>{nowPlaying?.results[0].overview}</Overview>
           </Banner>
-          <Slider data={data} />
+          <SliderContainer>
+            <label>Now Playing</label>
+            <Slider data={nowPlaying?.results} />
+          </SliderContainer>
+          {/* <SliderContainer>
+            <label>Top Rated</label>
+            <Slider data={topRated} />
+          </SliderContainer> */}
           <AnimatePresence>
             {bigMovieMatch && (
               <>

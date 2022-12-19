@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { makeImagePath } from "../utils";
-import { IGetMoviesResult } from "../api";
+import IMovieNowPlaying from "../models/IMovieNowPlaying";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Result from "../models/Result";
 
 const Wrapper = styled.div`
   position: relative;
-  top: -150px;
 `;
 
 const Row = styled(motion.div)`
@@ -105,7 +105,7 @@ const slideButtonVariants = {
 
 const offset = 6;
 
-function Slider({ data }: { data: IGetMoviesResult | undefined }) {
+function Slider({ data }: { data: Result[] | undefined }) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
@@ -120,7 +120,7 @@ function Slider({ data }: { data: IGetMoviesResult | undefined }) {
       if (leaving) return;
       toggleLeaving();
       setIndex((prev) => {
-        const totalMovies = data.results.length - 1;
+        const totalMovies = data.length - 1;
         const maxIndex = Math.floor(totalMovies / offset);
         let nextIndex = 0;
         if (isNext) {
@@ -149,8 +149,8 @@ function Slider({ data }: { data: IGetMoviesResult | undefined }) {
           animate="visible"
           exit="exit"
         >
-          {data?.results
-            .slice(1)
+          {data
+            ?.slice(1)
             .slice(offset * index, offset * (index + 1))
             .map((movie) => (
               <Box
