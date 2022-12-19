@@ -27,17 +27,13 @@ export function getMovieUpcoming(): Promise<IMovieUpcoming> {
 }
 
 export function getTvAiringToday() {
-  return getData("movie", "airing_today");
-}
-
-export function getTvLatest() {
-  return getData("movie", "latest");
+  return getData("tv", "airing_today");
 }
 
 export function getTvTopRated() {
-  return getData("movie", "top_rated");
+  return getData("tv", "top_rated");
 }
 
-export function getTvUpcoming() {
-  return getData("movie", "upcoming");
+export function getTvPopular() {
+  return getData("tv", "popular");
 }
