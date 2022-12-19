@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import MovieModel from "../models/MovieModel";
 import { makeImagePath } from "../utils";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { moviePopupState, popupLayoutIdState } from "../atoms";
+import { moviePopupState, popupLayoutIdState, tvPopupState } from "../atoms";
+import { ReactElement } from "react";
+import { NormalizedModel } from "../models/NormalizedMode";
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -49,57 +50,44 @@ const PopupPannelInfo = styled(motion.div)`
   grid-template-columns: 2fr 7fr;
   align-content: flex-start;
   gap: 15px 0;
-  &:first-child {
-    color: black;
-    justify-self: stretch;
-    background-color: red;
-  }
 `;
 
 interface IDetailsPopupProps {
-  movie: MovieModel | undefined;
+  item: NormalizedModel;
+  children: ReactElement[];
 }
 
-function DetailsPopup({ movie }: IDetailsPopupProps) {
+function DetailsPopup({ item, children }: IDetailsPopupProps) {
   const navigate = useNavigate();
   const setMovieOnPopup = useSetRecoilState(moviePopupState);
+  const setTvOnPopup = useSetRecoilState(tvPopupState);
   const popupLayoutId = useRecoilValue(popupLayoutIdState);
   const onOverlayClick = () => {
     setMovieOnPopup(undefined);
+    setTvOnPopup(undefined);
     navigate(-1);
   };
   return (
-    <>
-      <AnimatePresence>
-        <Overlay
-          key="popupOverlay"
-          onClick={onOverlayClick}
-          animate={{ opacity: 1 }}
-        />
-        {movie && (
-          <PopupPannel layoutId={popupLayoutId}>
-            <PopupPannelImage
-              style={{
-                backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
-                  movie.backdrop_path,
-                  "w500"
-                )})`,
-              }}
-            >
-              <h2>{movie.title}</h2>
-            </PopupPannelImage>
-            <PopupPannelInfo>
-              <h4>Release</h4>
-              <span>{movie.release_date}</span>
-              <h4>Stars</h4>
-              <span>{movie.vote_average}</span>
-              <h4>Overview</h4>
-              <span>{movie.overview}</span>
-            </PopupPannelInfo>
-          </PopupPannel>
-        )}
-      </AnimatePresence>
-    </>
+    <AnimatePresence>
+      <Overlay
+        key="popupOverlay"
+        onClick={onOverlayClick}
+        animate={{ opacity: 1 }}
+      />
+      <PopupPannel layoutId={popupLayoutId}>
+        <PopupPannelImage
+          style={{
+            backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(
+              item.backdrop_path,
+              "w500"
+            )})`,
+          }}
+        >
+          <h2>{item.title}</h2>
+        </PopupPannelImage>
+        <PopupPannelInfo>{children}</PopupPannelInfo>
+      </PopupPannel>
+    </AnimatePresence>
   );
 }
 

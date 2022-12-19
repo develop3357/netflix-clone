@@ -115,23 +115,21 @@ const offset = 6;
 interface ISliderProps {
   data: MovieModel[] | undefined;
   label: string;
-  context: string;
+  onClickHandler: Function;
 }
 
-function Slider({ data, label, context }: ISliderProps) {
+function Slider({ data, label, onClickHandler }: ISliderProps) {
   const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isSlideNext, setSlideNext] = useState(true);
-  const setMovieOnPopup = useSetRecoilState(moviePopupState);
-  const setPopupLayoutId = useSetRecoilState(popupLayoutIdState);
+
+  // 부모로부터 받은 함수를 실행 (무비와 티비가 처리가 다르기 때문)
+  const onItemClick = (onClickHandler: Function) => {
+    onClickHandler();
+  };
 
   const toggleLeaving = () => setLeaving((prev) => !prev);
-  const onBoxClicked = (movie: MovieModel, layoutId: string) => {
-    setPopupLayoutId(layoutId);
-    setMovieOnPopup(movie);
-    navigate(`/${context}/${movie.id}`);
-  };
   const slide = (isNext: boolean) => {
     setSlideNext(isNext);
     if (data) {
@@ -169,18 +167,20 @@ function Slider({ data, label, context }: ISliderProps) {
           animate="visible"
           exit="exit"
         >
-          {data?.slice(offset * index, offset * (index + 1)).map((movie) => (
+          {data?.slice(offset * index, offset * (index + 1)).map((item) => (
             <Box
-              layoutId={label + movie.id}
-              key={movie.id}
-              bgphoto={makeImagePath(movie.backdrop_path, "w500")}
+              layoutId={label + item.id}
+              key={item.id}
+              bgphoto={makeImagePath(item.backdrop_path, "w500")}
               variants={boxVariants}
               initial="normal"
               whileHover="hover"
-              onClick={() => onBoxClicked(movie, label + movie.id)}
+              onClick={() =>
+                onItemClick(() => onClickHandler(item, label + item.id))
+              }
             >
               <Info variants={infoVariants}>
-                <h4>{movie.title}</h4>
+                <h4>{item.title}</h4>
               </Info>
             </Box>
           ))}
