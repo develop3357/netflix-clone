@@ -3,10 +3,7 @@ import { motion, Variants } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { makeImagePath } from "../utils";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import MovieModel from "../models/MovieModel";
-import { useSetRecoilState } from "recoil";
-import { moviePopupState, popupLayoutIdState } from "../atoms";
+import { NormalizedModel } from "../models/NormalizedMode";
 
 const Wrapper = styled.div`
   position: relative;
@@ -28,7 +25,6 @@ const Row = styled(motion.div)`
 `;
 
 const Box = styled(motion.div)<{ bgphoto: string }>`
-  background-color: white;
   height: 200px;
   background-image: url(${(props) => props.bgphoto});
   background-position: center;
@@ -113,13 +109,12 @@ const slideButtonVariants = {
 const offset = 6;
 
 interface ISliderProps {
-  data: MovieModel[] | undefined;
+  data: NormalizedModel[] | undefined;
   label: string;
   onClickHandler: Function;
 }
 
 function Slider({ data, label, onClickHandler }: ISliderProps) {
-  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [isSlideNext, setSlideNext] = useState(true);

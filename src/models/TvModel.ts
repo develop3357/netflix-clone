@@ -1,4 +1,6 @@
-interface TvModel {
+import { NormalizedModel } from "./NormalizedMode";
+
+interface TvModel extends NormalizedModel {
   backdrop_path: string;
   first_air_date: string;
   genre_ids: number[];

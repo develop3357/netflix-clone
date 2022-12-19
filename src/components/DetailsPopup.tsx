@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { makeImagePath } from "../utils";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -58,6 +58,8 @@ interface IDetailsPopupProps {
 }
 
 function DetailsPopup({ item, children }: IDetailsPopupProps) {
+  const movieMatch = useMatch("/movie/:id");
+  const tvMatch = useMatch("/tv/:id");
   const navigate = useNavigate();
   const setMovieOnPopup = useSetRecoilState(moviePopupState);
   const setTvOnPopup = useSetRecoilState(tvPopupState);
@@ -65,7 +67,9 @@ function DetailsPopup({ item, children }: IDetailsPopupProps) {
   const onOverlayClick = () => {
     setMovieOnPopup(undefined);
     setTvOnPopup(undefined);
-    navigate(-1);
+    if (movieMatch || tvMatch) {
+      navigate(-1);
+    }
   };
   return (
     <AnimatePresence>

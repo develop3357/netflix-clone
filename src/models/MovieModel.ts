@@ -1,4 +1,6 @@
-interface MovieModel {
+import { NormalizedModel } from "./NormalizedMode";
+
+interface MovieModel extends NormalizedModel {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];

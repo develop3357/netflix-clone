@@ -26,7 +26,7 @@ const Loader = styled.div`
 function Tv() {
   const navigate = useNavigate();
   const tvOnPopup = useRecoilValue(tvPopupState);
-  const { data: airlingToday, isLoading: airlingTodayIsLoading } = useQuery(
+  const { data: airingToday, isLoading: airingTodayIsLoading } = useQuery(
     ["tvshows", "nowPlaying"],
     getTvAiringToday
   );
@@ -43,18 +43,18 @@ function Tv() {
 
   return (
     <Wrapper>
-      {airlingTodayIsLoading ? (
+      {airingTodayIsLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <Banner
-          title={airlingToday?.results[0].name}
-          imageUrl={makeImagePath(airlingToday?.results[0].backdrop_path || "")}
-          overview={airlingToday?.results[0].overview}
+          title={airingToday?.results[0].name}
+          imageUrl={makeImagePath(airingToday?.results[0].backdrop_path || "")}
+          overview={airingToday?.results[0].overview}
         />
       )}
       <Slider
-        label="Now Playing"
-        data={airlingToday?.results.slice(1)}
+        label="Airing Today"
+        data={airingToday?.results.slice(1)}
         onClickHandler={onSliderTvClick}
       />
       <Slider
@@ -63,7 +63,7 @@ function Tv() {
         onClickHandler={onSliderTvClick}
       />
       <Slider
-        label="Upcoming"
+        label="Popluar"
         data={popular?.results}
         onClickHandler={onSliderTvClick}
       />
