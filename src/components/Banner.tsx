@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import MovieModel from "../models/MovieModel";
 import { makeImagePath } from "../utils";
 
 const Wrapper = styled.div<{ bgPhoto: string }>`

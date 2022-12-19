@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMovieSearch, getTvSearch } from "../api";
 import { makeImagePath } from "../utils";
-import Tv from "./Tv";
 import { motion } from "framer-motion";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { moviePopupState, popupLayoutIdState, tvPopupState } from "../atoms";
 import DetailsPopup from "../components/DetailsPopup";
 import {
@@ -72,7 +71,6 @@ const itemVariants = {
 };
 
 function Search() {
-  const navigate = useNavigate();
   const location = useLocation();
   const options = new URLSearchParams(location.search);
   const keyword = options.get("keyword");
