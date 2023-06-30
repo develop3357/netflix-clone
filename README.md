@@ -1,46 +1,33 @@
-# Getting Started with Create React App
+# 넷플릭스 클론 예제
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[https://develop3357.github.io/netflix-clone/](https://develop3357.github.io/netflix-clone/)
 
-## Available Scripts
+React를 사용해 넷플릭스 UI 일부를 따라서 구현한 예제 프로젝트
 
-In the project directory, you can run:
+## What I Learned
 
-### `npm start`
+- 기본적인 React 사용법과 여러 라이브러리 활용
+- 컴포넌트 생명주기에 대한 약간의 이해
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Libraries
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- recoil
+- react-query
+- framer-motion
+- styled-components
 
-### `npm test`
+## What I Thought
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 컴포넌트 재사용에 대한 고려
 
-### `npm run build`
+영화와 TV 프로그램의 데이터 타입은 각각 다르지만 UI에서는 모두 유사한 외형의 팝업으로 표시된다. 카테고리가 2개 뿐이므로 단순히 파일을 2개 만들 수도 있겠지만 동일한 코드를 복붙하는 것에 불과하기 때문에 바람직하지 못하다. 차후 카테고리가 늘어날 수 있고 UI가 변경될 경우 일일히 수정하는 결과를 초래하지 않기 위해서 팝업을 하나의 컴포넌트로 통합했다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+여러 방법이 있겠지만 이번에는 두 객체의 공통점을 나열하고 표준화하는 중간 객체를 새로 만들어서 도입해봤다. UI에서는 표준화된 객체를 사용해 데이터를 출력하고, 두 객체의 차이점 부분은 엘레멘트를 따로 전달해서 출력했다. 차후에 다시 한다면 객체의 정보가 제목, 내용, 별점처럼 키:값 쌍을 이루고 있기 때문에 객체를 map으로 변경해서 전달하고, 사용하는 쪽에서 iteration해서 하나씩 꺼내쓰는 방법을 사용할 것 같다.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 라이브러리를 잘 사용하는 것
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+실무를 몇 년 해오면서 더욱 인상깊게 다가오는 말은 "바퀴를 발명하려고 하지 마라."는 것이다. 처음 배우기 시작했을 때는 모두 직접 구현해보고 싶다고 생각한 적이 있지만, 비즈니스 레벨에서 요구되는 수준까지 맞추려면 코드가 방대해지기 때문에 일일히 구현하기에는 생산성이 너무 떨어진다고 공감하게 됐다. 리액트 기반의 오픈 소스 생태계도 마찬가지로, 생각할 수 있는 웬만한 기능은 이미 다 존재했다. 견문을 넓히고 이미 존재하는 오픈 소스를 잘 활용하는 것도 중요한 소양이라고 느낀다.
 
-### `npm run eject`
+### 버전 이슈 처리
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+참고 예제에서는 대부분의 라이브러리를 몇 년씩 지난 구버전을 사용했던지라 최신 버전으로 바꿔서 개발했다. 각각의 의존성이 얽혀있어서 버전으로 인해 발생하는 문제를 처리하는데 어느 정도 품이 들었다. 불필요하게 시간을 가장 낭비했던 부분은, framer-motion이 최신 버전에서 슬라이더가 오동작하는 문제를 처리할 때였다. 간헐적으로 슬라이더가 움직이는 방향이 역전되는 일이 생겼다. 코드 상의 문제는 없었지만 코드만 보느라 시간을 낭비했다. 결국 해결한 방법은 framer-motion 버전을 낮추는 것이었고, 이것만으로 문제가 해결되었다. 코드 외적인 부분까지 시야를 넓히는 계기가 되었다.
