@@ -1,4 +1,4 @@
-import { NormalizedModel } from "./NormalizedMode";
+import { NormalizedModel } from "./NormalizedModel";
 
 interface MovieModel extends NormalizedModel {
   adult: boolean;

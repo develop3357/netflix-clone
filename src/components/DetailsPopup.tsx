@@ -6,7 +6,7 @@ import { makeImagePath } from "../utils";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { moviePopupState, popupLayoutIdState, tvPopupState } from "../atoms";
 import { ReactElement } from "react";
-import { NormalizedModel } from "../models/NormalizedMode";
+import { NormalizedModel } from "../models/NormalizedModel";
 
 const Overlay = styled(motion.div)`
   position: fixed;

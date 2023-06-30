@@ -3,7 +3,7 @@ import { motion, Variants } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 import { makeImagePath } from "../utils";
 import { useState } from "react";
-import { NormalizedModel } from "../models/NormalizedMode";
+import { NormalizedModel } from "../models/NormalizedModel";
 
 const Wrapper = styled.div`
   position: relative;

@@ -1,4 +1,4 @@
-import { NormalizedModel } from "./NormalizedMode";
+import { NormalizedModel } from "./NormalizedModel";
 
 interface TvModel extends NormalizedModel {
   backdrop_path: string;

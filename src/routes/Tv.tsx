@@ -7,7 +7,7 @@ import { popupLayoutIdState, tvPopupState } from "../atoms";
 import Banner from "../components/Banner";
 import DetailsPopup from "../components/DetailsPopup";
 import Slider from "../components/Slider";
-import { normalizeTvModel } from "../models/NormalizedMode";
+import { normalizeTvModel } from "../models/NormalizedModel";
 import TvModel from "../models/TvModel";
 import { makeImagePath } from "../utils";
 

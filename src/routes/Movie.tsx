@@ -7,7 +7,7 @@ import { moviePopupState, popupLayoutIdState } from "../atoms";
 import Banner from "../components/Banner";
 import DetailsPopup from "../components/DetailsPopup";
 import Slider from "../components/Slider";
-import { normalizeMovieModel } from "../models/NormalizedMode";
+import { normalizeMovieModel } from "../models/NormalizedModel";
 import { makeImagePath } from "../utils";
 import MovieModel from "../models/MovieModel";
 

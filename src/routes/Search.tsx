@@ -10,7 +10,7 @@ import DetailsPopup from "../components/DetailsPopup";
 import {
   normalizeMovieModel,
   normalizeTvModel,
-} from "../models/NormalizedMode";
+} from "../models/NormalizedModel";
 import MovieModel from "../models/MovieModel";
 import TvModel from "../models/TvModel";
 
